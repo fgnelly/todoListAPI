@@ -37,5 +37,8 @@ def app_and_db_session_scope(token, requiredPermissionLevel):
     try:
         with session_scope() as db_session:
             yield AppSessionScope(token, db_session, requiredPermissionLevel)
-    except HttpException as exc:
-        raise exc
+    except Exception as exc:
+        if isinstance(exc, HttpException):
+            raise exc
+        else:
+            raise HttpException(HttpErrorType.GeneralConnectionError)

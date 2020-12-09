@@ -36,6 +36,11 @@ class HttpErrorType(Enum):
         'code': 404
     }
 
+    GeneralConnectionError = {
+        'code': 500,
+        'body': {'message': 'Something went beep boop and we\'re here now. Sorry for that.'}
+    }
+
 class Error(Exception):
     """Base class for exceptions in this module."""
     pass
