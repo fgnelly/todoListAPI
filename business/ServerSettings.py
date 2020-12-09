@@ -12,7 +12,7 @@ def GetPublicSetting(request):
         with SessionHandler.app_and_db_session_scope("", SessionHandler.PermissionLevel.NONE) as session:
             requestedSetting = ServerSetting.getByName(session.db_session, requestJSON['settingName'])
             if requestedSetting.count() > 0 and requestedSetting.first().isPublic:
-                return SessionHandler.returnRequestOK(requestedSetting.first().toJSONObject())
+                return SessionHandler.OK(requestedSetting.first().toJSONObject())
             raise HttpException(HttpErrorType.NotFound, "GetPublicSetting", "Setting was not found.")
     except HttpException as exc:
         return exc.GetResponse()

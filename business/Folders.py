@@ -16,7 +16,7 @@ def Create(request):
                 raise HttpException(HttpErrorType.GenericError, 'Folder Create', 'A folder with that name already exists in the database.')
             
             addedFolder = Folder.addNew(session=session.db_session, ownerid=session.current_user.id, name=requestJSON['name'], description=requestJSON['description'])
-            return SessionHandler.returnRequestOK(addedFolder.toJSONObject())
+            return SessionHandler.OK(addedFolder.toJSONObject())
     except HttpException as exc:
         return exc.GetResponse()
 
@@ -30,6 +30,6 @@ def GetAll(request):
         with SessionHandler.app_and_db_session_scope(requestJSON['logintoken'], SessionHandler.PermissionLevel.USER) as session:
             allFolders = Folder.getAllFromOwnerId(session.db_session, session.current_user.id)
             JSONFolders = [] if allFolders.count() == 0 else list(map(lambda x: x.toJSONObject(), allFolders))
-            return SessionHandler.returnRequestOK({"folders": JSONFolders})
+            return SessionHandler.OK({"folders": JSONFolders})
     except HttpException as exc:
         return exc.GetResponse()

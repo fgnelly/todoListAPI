@@ -16,7 +16,7 @@ def Create(request):
                 raise HttpException(HttpErrorType.NotFound, 'Task Create', 'No such folder found under current user')
 
             addedTask = Task.addNew(session.db_session, session.current_user.id, requestJSON['name'], requestJSON['description'], requestJSON['parent_folder_id'])
-            return SessionHandler.returnRequestOK(addedTask.toJSONObject())
+            return SessionHandler.OK(addedTask.toJSONObject())
 
     except HttpException as exc:
         return exc.GetResponse()
@@ -32,7 +32,7 @@ def GetByFolderId(request):
         with SessionHandler.app_and_db_session_scope(requestJSON['logintoken'], SessionHandler.PermissionLevel.USER) as session:
             foundTasks = Task.getAllFromFolderId(session.db_session, requestJSON['parent_folder_id'], session.current_user.id)
             JSONTasks = [] if foundTasks.count() == 0 else list(map(lambda x: x.toJSONObject(), foundTasks))
-            return SessionHandler.returnRequestOK({"tasks": JSONTasks})
+            return SessionHandler.OK({"tasks": JSONTasks})
 
     except HttpException as exc:
         return exc.GetResponse()
@@ -51,7 +51,7 @@ def CompleteTaskById(request):
                 raise HttpException(HttpErrorType.NotFound, 'Updating Task', 'No task found for given id.')
 
             foundTask.first().setAsCompleted()
-            return SessionHandler.returnRequestOK()
+            return SessionHandler.OK()
 
     except HttpException as exc:
         return exc.GetResponse()

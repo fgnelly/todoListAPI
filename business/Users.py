@@ -17,7 +17,7 @@ def Create(request):
             if User.loadFromDbByUsername(session.db_session, username=requestJSON['username']) is not None:
                 raise HttpException(HttpErrorType.GenericError, 'User create', 'User with that username already exists in the database.')
             addedUser = User.addNew(session=session.db_session, name=requestJSON['name'], username=requestJSON['username'], password=encryptPassword(requestJSON['password']))
-            return SessionHandler.returnRequestOK(addedUser.toJSONObject())
+            return SessionHandler.OK(addedUser.toJSONObject())
     except HttpException as exc:
         return exc.GetResponse()
 
@@ -36,7 +36,7 @@ def Login(request, logger):
             else:
                 if(verifyPassword(requestJSON['password'], loadedUser.password)):
                     newSession = AppSession.addNewOrReturnLastIfValid(session.db_session, loadedUser.id, 1, requestJSON['userAgent'] if 'userAgent' in requestJSON else '')
-                    return SessionHandler.returnRequestOK({'logintoken': newSession.token})
+                    return SessionHandler.OK({'logintoken': newSession.token})
             logger.error('Failed logon attempt for username: {}, from remote address: {}'.format(requestJSON['username'], str(request.remote_addr)))
             raise HttpException(HttpErrorType.GenericError, 'login', 'Invalid username or password.')
     except HttpException as exc:
@@ -51,6 +51,6 @@ def Logout(request):
         assertJSON(requestJSON, ['logintoken'])
         with SessionHandler.app_and_db_session_scope(requestJSON['logintoken'], SessionHandler.PermissionLevel.USER) as session:
             session.app_session.invalidate()
-            return SessionHandler.returnRequestOK()
+            return SessionHandler.OK()
     except HttpException as exc:
         return exc.GetResponse()
