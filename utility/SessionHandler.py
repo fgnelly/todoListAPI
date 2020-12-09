@@ -8,7 +8,7 @@ class PermissionLevel(Enum):
     USER = 1
     ADMIN = 2
 
-def returnRequestOK(json_data={}):
+def OK(json_data={}):
     json_data['success'] = True
     return json.dumps(json_data), 200, {'ContentType':'application/json'}
 
