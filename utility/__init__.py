@@ -1,1 +1,1 @@
-__all__ = ["Security", "SessionHandler", "HttpException", "UserInput"]
+__all__ = ["Security", "SessionHandler", "HttpException", "UserInput", "Config"]
