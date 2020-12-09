@@ -1,0 +1,8 @@
+Tasks and folders:
+ - A folder is a parent, it can only contain tasks, a name and a description
+
+Folder DB:
+id, ownerid, name, desc, sortNum
+
+Task DB:
+id, parentid, name, ...
