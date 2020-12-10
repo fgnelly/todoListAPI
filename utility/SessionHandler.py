@@ -1,4 +1,4 @@
-from data import AppSession, session_scope, User
+from data import AppSession, db_session_scope, User
 from .HttpException import HttpException, HttpErrorType
 import json
 from enum import Enum
@@ -35,7 +35,7 @@ from contextlib import contextmanager
 @contextmanager
 def app_and_db_session_scope(token, requiredPermissionLevel):
     try:
-        with session_scope() as db_session:
+        with db_session_scope() as db_session:
             yield AppSessionScope(token, db_session, requiredPermissionLevel)
     except Exception as exc:
         if isinstance(exc, HttpException):
